@@ -95,6 +95,22 @@ The general function we hope to attain from each particle is explained as follow
         <p>
             Another important aspect that we care about is performance. Particle sims are notorious for being computationally expensive for high granularity. We are interested in rendering scenes like in Noita, that are pixelated and easy to render. However, if we wish to render galaxy scenes and the like, not only will the textures be different but the fluid properties used to simulate a galaxy image and animate it will also be a lot stronger, and the particles will be a lot smaller. We will measure common factors, such as the number of light rays per intersection and how many intersections occur in unit time. Different data structures (similar to bvhs) will have to be constructed, as well as clever ray marching algorithms to parameterize more complex light paths, such as around a black hole particle. Finally, because realistic physics is a goal of our project with simple particles, the light will also have to be properly importance sampled (possibly using a pdf approximation method like MCMCs): (The types of images we want to render range from 8 bit game scenes (similar to Noita) like: Noita.jpg, And galaxy sims like: galaxy.jpg): 
         </p>
+        <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="doc/noita.jpg" width="480px" />
+                    <figcaption align="middle"> 
+</figcaption>
+                </tr>
+                <tr>
+                    <td align="middle">
+                    <img src="doc/galaxy.jpg" width="480px" />
+                        <figcaption align="middle"></figcaption>
+
+                
+            </table>
+        </div>
         <br> 
         
         
