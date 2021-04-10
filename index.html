@@ -15,7 +15,7 @@
             font-family: 'Source Sans Pro', sans-serif;
         }
         </style>
-        <title>CS 184 Rasterizer</title>
+        <title>CS 184 Particle Simulation</title>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <link href="https://fonts.googleapis.com/css?family=Open+Sans|Source+Sans+Pro" rel="stylesheet">
     </head>
@@ -31,14 +31,14 @@
         <h1>Summary</h1>
         
         <p>
-            We will be creating a way to visualize several different types of particles interacting with eachother and their virtual environment
+            We will be creating a way to visualize several different types of particles interacting with eachother and their virtual environment.
         </p>
         
         <h1>
             Problem Description
         </h1>
         <p>
-            In project 3, we modeled our camera as either having perfectly straight rays, or as having a single perfectly focused lens. In the real world, lenses are not so simple, and if we wanted to test what effect certain lens configurations could have on an image we would be unable to use the tool. By extending the raytracer to ray trace through physical lenses, we gain the ability to test lens effects before physically creating them, saving us from having to construct physical lenses or needing to work out complex math to determine the effect that it could have on the image. To extend this idea, we are implementing other characteristics of a camera to further help simulate physical cameras’ effects on images. These effects will be challenging as we will need to implement the various rules for light refracting through lenses, for every possible lens and for every set of lens configurations. We plan to implement these features by extending the project 3 raytracer. If we change how rays are generated before being sent through the raytracer, we can keep most of the features that we implemented before and prevent having to reimplement things. For changing focus, we can do some preprocessing on the image to determine possible pre-defined focus, and for autofocus we can create a heuristic to compare various values of focus to help decide on an optimal one. For flash and auto brightness we can either add an additional light element to the scene at the location of the camera, or do additional post processing on the image for auto brightness where we adjust every final pixel in the image.
+            In project 3-2, we worked with different textures and how they interact with light. For this project we will simulate how these types of particles interact with light and with their environment.
 
         </p>
         
