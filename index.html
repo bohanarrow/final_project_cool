@@ -22,77 +22,142 @@
 
     <body>
 
-        <h1 align="middle">CS 184 Final Project: Particle Interaction</h1> 
+        <h1 align="middle">CS 184 Final Project: Particle Simulator</h1> 
         <br />
         <h1>Members</h1>
         <p>
             Tyler Bohan, Matt Bronars, Andrew Yeh, Prabhman Dhaliwal
         </p>
-        <h1>Summary</h1>
+        <h1>Purpose</h1>
         
         <p>
-            We will be creating a way to visualize several different types of particles interacting with eachother and their virtual environment.
+            The purpose of this project is to use particle simulation to make animated, interesting, 2-dimensional, 8-bit scenes.  This is not an interactive demo, rather a scene with predefined initial conditionals that we render for 10 seconds.  
         </p>
         
         <h1>
             Problem Description
         </h1>
         <p>
-            In project 3-2, we worked with different textures and how they interact with light. For this project we will simulate how these types of particles interact with light and with their environment.
+            Particle simulation gives a more granular view of objects and scenes. For example, in the film Interstellar the black hole scenes were all rendered using a particle sim method, that gave it that vibrant look. While it is infeasible for us to create something on that order in the time frame we have, we took inspiration from Noita on how they defined a simple set of particles that shaped their entire world. The problem we wish to solve is how quickly we can render a realistic particle based scene that takes advantage of the full capabilities of both particle/particle and particle/light interactions. This problem is challenging because particle sims are computationally heavy, and require much finer ray tracing methods to fully encapsulate how to light different objects represented with really tiny particles. Additionally, making the sims realistic (at least physically, possibly not in appearance), with a simple set of particles is challenging because we are representing the complex nature of physics with a simpler set of rules.  We will be doing this mainly by implementing advanced ray tracing speedups and particle simulation methods discussed in class.
 
         </p>
         
         <h2 align="middle">Goals and Deliverables</h2>
-        <h3>Part 1: Baseline Plan</h3>
         <p>
-            Our main goal with this project is to extend the raytracer we had previously implemented to include additional features, such as autofocus, manual focus, and flash that can simulate the capabilities of a physical camera. Some deliverables would include before and after images for flash and short videos demonstrating how autofocus and manual focus can be used and how they can change the image. Our baseline plan for these features would be having them all as command line arguments. 
+            The first thing we need to do for this project is define the particle properties.  This means working out the physics of how each type of particle will move around the screen and interact with light.  Additionally, we must also define how these particles interact with other particles both of the same type and different types.  Our goal is to come up with 8 different types of particles: fire, water, stone, ice, sand, organic matter, gravitons, and bedrock.
+The general function we hope to attain from each particle is explained as follows:
         </p>
         <p>
-            To measure the performance, we are going to do a comparison of different lens configurations and ensure that the runtime should be around the same for all of them. For the quality, we will be basing it off of similar tests in the spec since the work done in this past project is a baseline for what we plan to implement in our project.
+            -Fire - emits light and spreads/burn
         </p>
-        
-        
-        <h3>Part 2: Inspirational Plan</h3>
+        <br>
         <p>
-            As mentioned in our baseline plan, our main goal is to “extend the raytracer we had previously implemented to include additional features, 
-            such as autofocus, manual focus, and flash that can simulate the capabilities of a physical camera.”  On top of these, if things go well 
-            and we have more time to further extend this project, for a new feature, we would like to try post-processing on the produced images for 
-            automatic brightness.  We will set a certain threshold to determine the middle ground for brightness to brighten an image if it’s too dark 
-            or darken an image if it’s too bright.<br /> To improve our current baseline plan, we would aim to convert parameter-setting on the terminal command 
-            line into an interactive part of the GUI in which the user can turn a dial or slider to change the focus or click a key or button to autofocus 
-            or enable flash.
+            -Water - reflect and refract light.  Flows, makes things wet, freezes, and evaporates.
+        </p>
+        <br>
+        <p>
+            -Stone - holds its shape and falls
+        </p>
+        <br>
+        <p>
+            -Ice - reflects light, melts, holds its shape
+        </p>
+        <br>
+        <p>
+            -Sand - does not hold its shape and falls
+        </p>
+        <br>
+        <p>
+            -Organic Matter - Grows when touching water and being hit by natural light.  Burns from fire
+        </p>
+        <br>
+        <p>
+            -Gravitons - Bends light, produces black holes when gathered.  Sucks objects in
+        </p>
+        <br>
+        <p>
+            -Bedrock - Does not move, stays where it is placed, unaffected by other particles
+        </p>
+        <br>
+        <p>
+            After we have the particle interactions determined, we need to find appropriate textures for each one and come up with a scene in which these particles will interact.  Once we have the groundwork laid, most of our work will go into speeding up the rendering of our scene.  We will be using ray tracing for light (as well as ray marching for around the black holes) so we must come up with ways to accelerate these processes.  This will be done primarily using BVH structures, importance sampling, and other methods described in the extra credit sections of projects.  The main metric we will be using to judge the performance of our project is the speed at which we can render a scene with 1, 10, 100, and 1000 particles of each type.
+        </p>
+        <br>
+        <p>
+            The challenge for this project comes from the flexibility we expect from the simulation settings. The appearance should be strongly dependent on the textures that we use, however the properties of particles should be consistent across scenes that we render. The lighting sources that we wish to simulate change depending on the objects material properties and physics. The most extreme example (which we took inspiration from Kenny’s project for) is the black hole: when enough of its particles are accumulated in an area, it should form a black hole that bends light around with (similar to the ray marching algorithm), and also kills any light rays that touch it. Managing all the interactions between light and our particles (like how fire spreads and also acts as a light source) is one way we can test the limits on possible ray tracing (and ray marching) algorithms we learned in class. We have been able to produce simple scenes with different light properties in previous projects, but seeing how it can come together in scenes with multiple complex materials (and possibly animated and at different resolutions) is one of the main challenges we wish to overcome. 
+        </p>
+        <br>
+        <p>
+            Another important aspect that we care about is performance. Particle sims are notorious for being computationally expensive for high granularity. We are interested in rendering scenes like in Noita, that are pixelated and easy to render. However, if we wish to render galaxy scenes and the like, not only will the textures be different but the fluid properties used to simulate a galaxy image and animate it will also be a lot stronger, and the particles will be a lot smaller. We will measure common factors, such as the number of light rays per intersection and how many intersections occur in unit time. Different data structures (similar to bvhs) will have to be constructed, as well as clever ray marching algorithms to parameterize more complex light paths, such as around a black hole particle. Finally, because realistic physics is a goal of our project with simple particles, the light will also have to be properly importance sampled (possibly using a pdf approximation method like MCMCs): (The types of images we want to render range from 8 bit game scenes (similar to Noita) like: Noita.jpg, And galaxy sims like: galaxy.jpg): 
+        </p>
+        <br> 
+        
+        
+        
+        
+        <h3>What questions we plan to answer</h3>
+        <p>
+            How physically realistic can we make animations with a simple set of particles? 
 
         </p>
+        <br>
+        <p>
+            How physically realistic can we make animations with a simple set of particles? 
+        </p>
+        <br>
+        <p>
+            What is the most speedup we can get using more interesting ray tracing acceleration methods?
+        </p>
+        <br>
+        <p>
+            How complex can we make the light sources that interact with our particles?
+        </p>
+        <br>
+        <p>
+            What is the range of images we can render with just these particles? 
+        </p>
+        <br>
+        
+        <h3>What we plan to deliver</h3>
+        <p>
+            Simples 8 bit animations akin to the noita image that showcase how our different particles can interact with each other and represent complex scenes. 
+        </p>
+        <br>
+        <h3>What we hope to deliver</h3>
+        <p>
+            More complex animations (like the galaxy image) that use more interesting textures and give a feel of physics based realism, as well as the 8 bit images. Our ultimate aspiration is to render completely different animations using the same system, and possibly have some form of interaction (such as shooting particles from a character in the 8 bit scene, or being able to generate random galaxies). 
+        </p>
+        <br>
+        
+        
 
         <h3>Schedule</h3>
         
-            <ul>
-               <li> Week 1: 4/5 - 4/10</li>
-                <li>Proposal due 4/9</li>
-                <ul>
-                    <li>Tyler: Title Summary, Problem Description, Goals and deliverables part 1</li>
-                    <li><Matt: Goals and deliverables part 1, Tasks</li>
-                    <li>Prabhman: Goals and deliverables part 2</li>
-                    <li>Andrew: Resources</li>
-                </ul>
-              <li>Week 2: 4/11 - 4/17</li>
-              <ul><li>Proposal revisions + outline code</li></ul>
-              <li>Week 3: 4/18 - 4/24</li>
-              <ul><li>Continue working on code + milestone</li></ul>
-              <li>Week 4: 4/25 - 5/1</li>
-              <ul><li>Milestone due 4/27 + continue working on code</li></ul>
-              <li>Week 5: 5/2 - 5/8</li>
-              <ul><li>Finalize code + final presentations 5/6</li></ul>
-              <li>Week 6: 5/9 - 5/11</li>
-              <ul><li>Final deliverables due 5/11</li></ul>
-            </ul>
+            <p>
+                Week 1 + 2: Research paper readings on particle sim, finding an adequate framework to work in and how to render these scenes. Stuff like THREE.js comes to mind (from Kenny), but there could be better packages using more familiar languages, like python of c++. We need to do the bulk of our project structure in this and the second week. 
+        </p>
+        <br>
+        <p>
+            Week 3: Putting together structures, adequate textures, and generating a simulation using our particles on an 8 bit example animation. 
+        </p>
+        <br>
+        <p>
+            Week 4: Rendering more complex and granular animations, like the galaxy sim. 
+        </p>
+        <br>
 
         
         <h2 align="middle">Resources</h2>
         <p>
-            Our main reference will be an old <a href="https://cs184.eecs.berkeley.edu/sp16/article/19">spec</a> from a previous iteration of the class. We will be building off of someone’s ray tracer implementation from Project 3.
-            We will also use this <a href=https://www1.cs.columbia.edu/CAVE/publications/pdfs/Nayar_CVPR92.pdf>paper</a> to help make our autofocus algorithm efficient. We were also referencing this <a href=https://cs184.eecs.berkeley.edu/sp21/lecture/15/cameras-and-lenses>lecture</a> for our lens-ray interactions and auto focus methods.
+Kenny’s project last year for black hole sims: https://celticspwn.github.io/CS184FinalProject/final.html
         </p>
+        <br> 
+        <p>
+            PARTICLE BASED SIM OF GRANULAR OBJECTS: https://dl.acm.org/doi/abs/10.1145/1073368.1073379
+        </p>
+        <br>
+        <p>
+            
 
     </body>
 </html>
